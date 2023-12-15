@@ -20,8 +20,6 @@ function App() {
   const [students, setStudents] = useState(studentsData);
   const [values, setAllValues] = useState(initialValues);
 
-  console.log(values);
-
   const handleChange = (e) => {
     const currentName = e.target.name;
     let currentValue = e.target.value;
