@@ -8,22 +8,32 @@ import TableHeader from "./components/TableHeader";
 
 function App() {
   const initialValues = {
-    text: "",
-    url: "",
-    telphone: "",
+    fullName: "",
+    image: "",
+    telephone: "",
     email: "",
-    password: "",
-    checkbox: false,
-    select: "",
-    number: 0
+    graduationYear: 2023,
+    program: "",
+    graduated: false
   };
 
   const [students, setStudents] = useState(studentsData);
   const [values, setAllValues] = useState(initialValues);
 
+  console.log(values);
+
   const handleChange = (e) => {
+    const currentName = e.target.name;
+    let currentValue = e.target.value;
+    if (e.target.type === 'checkbox') {
+      currentValue = e.target.checked;
+    }
+    if (e.target.type === 'number') {
+      currentValue = e.target.valueAsNumber;
+    }
+
     setAllValues({
-      ...values, [e.target.name]: e.target.value || e.target.checked || e.target.valueAsNumber
+      ...values, [currentName]: currentValue
     })
   }
 
@@ -31,6 +41,7 @@ function App() {
     e.preventDefault();
 
     const newStudent = { ...values };
+
     setStudents([...students, newStudent]);
     setAllValues(initialValues);
   }
@@ -46,29 +57,29 @@ function App() {
         <div>
           <label>
             Full Name
-            <input name="fullName" type="text" placeholder="Full Name" onChange={handleChange} />
+            <input name="fullName" type="text" placeholder="Full Name" value={values.fullName} onChange={handleChange} />
           </label>
 
           <label>
             Profile Image
-            <input name="image" type="url" placeholder="Profile Image" onChange={handleChange} />
+            <input name="image" type="url" placeholder="Profile Image" value={values.image} onChange={handleChange} />
           </label>
 
           <label>
             Phone
-            <input name="phone" type="tel" placeholder="Phone" onChange={handleChange} />
+            <input name="phone" type="tel" placeholder="Phone" value={values.phone} onChange={handleChange} />
           </label>
 
           <label>
             Email
-            <input name="email" type="email" placeholder="Email" onChange={handleChange} />
+            <input name="email" type="email" placeholder="Email" value={values.email} onChange={handleChange} />
           </label>
         </div>
 
         <div>
           <label>
             Program
-            <select name="program" onChange={handleChange}>
+            <select name="program" value={values.program} onChange={handleChange}>
               <option value="">-- None --</option>
               <option value="Web Dev">Web Dev</option>
               <option value="UXUI">UXUI</option>
@@ -82,6 +93,7 @@ function App() {
               name="graduationYear"
               type="number"
               placeholder="Graduation Year"
+              value={values.graduationYear}
               minLength={4}
               maxLength={4}
               min={2023}
@@ -92,7 +104,7 @@ function App() {
 
           <label>
             Graduated
-            <input name="graduated" type="checkbox" onChange={handleChange} />
+            <input name="graduated" type="checkbox" value={values.graduated} onChange={handleChange} />
           </label>
 
           <button type="submit">Add Student</button>
