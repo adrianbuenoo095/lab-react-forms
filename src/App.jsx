@@ -1,77 +1,74 @@
 import { useState } from "react";
 import "./App.css";
+import studentsData from "./assets/students.json";
 import Navbar from "./components/Navbar";
 import StudentCard from "./components/StudentCard";
 import TableHeader from "./components/TableHeader";
 
-import studentsData from "./assets/students.json";
 
 function App() {
-  //   const initialValues = {
-  //     text: "",
-  //     url: "",
-  //     country: "",
-  //     phone: "",
-  //     email: "",
-  //     username: "",
-  //     password: "",
-  //     cpassword: ""
-  // };
+  const initialValues = {
+    text: "",
+    url: "",
+    telphone: "",
+    email: "",
+    password: "",
+    checkbox: false,
+    select: "",
+    number: 0
+  };
 
   const [students, setStudents] = useState(studentsData);
-  const [text, setText] = useState("");
-  const [url, setUrl] = useState("");
-  const [telphone, setTelphone] = useState("");
-  const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  const [checkbox, setCheckbox] = useState(false);
-  const [select, setSelect] = useState("");
-  const [number, setNumber] = useState(0);
+  const [values, setAllValues] = useState(initialValues);
 
-  const handleTextInput = (e) => { setText(e.target.value) }
-  const handleUrlInput = (e) => { setUrl(e.target.value) }
-  const handleTelphoneInput = (e) => { setTelphone(e.target.value) }
-  const handleEmailInput = (e) => { setEmail(e.target.value) }
-  // const handlePasswordInput = (e) => { setPassword(e.target.value) }
-  const handleCheckboxInput = (e) => { setCheckbox(e.target.checkbox) }
-  const handleSelectInput = (e) => { setSelect(e.target.value) }
-  const handleNumberInput = (e) => { setNumber(e.target.valueAsNumber) }
+  const handleChange = (e) => {
+    setAllValues({
+      ...values, [e.target.name]: e.target.value || e.target.checked || e.target.valueAsNumber
+    })
+  }
 
-  console.log(handleNumberInput)
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    const newStudent = { ...values };
+    setStudents([...students, newStudent]);
+    setAllValues(initialValues);
+  }
+
 
   return (
     <div className="App pt-20">
       <Navbar />
 
       {/* FORM */}
-      <form onSubmit={(e) => { console.log(e.target) }}>
+      <form onSubmit={handleFormSubmit}>
         <span>Add a Student</span>
         <div>
           <label>
             Full Name
-            <input name="fullName" type="text" placeholder="Full Name" onChange={handleTextInput} />
+            <input name="fullName" type="text" placeholder="Full Name" onChange={handleChange} />
           </label>
 
           <label>
             Profile Image
-            <input name="image" type="url" placeholder="Profile Image" onChange={handleUrlInput} />
+            <input name="image" type="url" placeholder="Profile Image" onChange={handleChange} />
           </label>
 
           <label>
             Phone
-            <input name="phone" type="tel" placeholder="Phone" onChange={handleTelphoneInput} />
+            <input name="phone" type="tel" placeholder="Phone" onChange={handleChange} />
           </label>
 
           <label>
             Email
-            <input name="email" type="email" placeholder="Email" onChange={handleEmailInput} />
+            <input name="email" type="email" placeholder="Email" onChange={handleChange} />
           </label>
         </div>
 
         <div>
           <label>
             Program
-            <select name="program" onChange={handleSelectInput}>
+            <select name="program" onChange={handleChange}>
               <option value="">-- None --</option>
               <option value="Web Dev">Web Dev</option>
               <option value="UXUI">UXUI</option>
@@ -89,13 +86,13 @@ function App() {
               maxLength={4}
               min={2023}
               max={2030}
-              onChange={handleNumberInput}
+              onChange={handleChange}
             />
           </label>
 
           <label>
             Graduated
-            <input name="graduated" type="checkbox" onChange={handleCheckboxInput} />
+            <input name="graduated" type="checkbox" onChange={handleChange} />
           </label>
 
           <button type="submit">Add Student</button>
